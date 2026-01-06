@@ -1,0 +1,77 @@
+.date-input {
+    width: 180px !important;
+    padding: 6px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    font-family: Arial, sans-serif !important;
+    background: #fff !important;
+    margin:8px 0 14px 0;
+}
+
+.date-input-hidden {
+    display: none !important;
+}
+
+.calendar {
+    position: absolute !important;
+    top: 50px;
+    left: 0;
+    background: #fff !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    padding: 8px !important;
+    font-family: Arial, sans-serif !important;
+    display: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+    width: 220px !important;
+    z-index: 9999 !important;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    gap: 2px;
+}
+
+.day {
+    padding: 6px 0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.day:not(.disabled) {
+    cursor: pointer;
+}
+
+.day:hover:not(.disabled) {
+    background: #006edc !important;
+    color: white !important;
+}
+
+.disabled {
+    background: #f0f0f0 !important;
+    color: #aaa !important;
+    cursor: not-allowed;
+}
+
+.weekday {
+    font-weight: bold;
+    font-size: 13px;
+    padding-bottom: 4px;
+}
+
+.nav-btn {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 16px;
+    padding: 0 4px;
+}
