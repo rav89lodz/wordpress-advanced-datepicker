@@ -6,16 +6,36 @@
 
         <table class="form-table">
             <tr valign="top">
-                <th scope="row">ID produktów (jeśli chcesz używać w WooCommerce)</th>
+                <th scope="row">Jeśli chcesz używać w WooCommerce</th>
                 <td>
-                    <input type="text" name="product_datepicker_product_ids" style="font-family: monospace; min-width: 500px" value="<?php echo esc_attr( get_option('product_datepicker_product_ids', null) ); ?>">
-                    <p class="description">
-                        Podaj ID produktu, do którego ma być przypisany widget daty. Kolejne wartości oddzielaj przecinkami.<br>
-                    </p>
+                    <div>
+                        <input type="text" name="product_datepicker_product_ids" style="font-family: monospace; min-width: 500px" value="<?php echo esc_attr( get_option('product_datepicker_product_ids', null) ); ?>">
+                        <p class="description">
+                            Podaj ID produktu, do którego ma być przypisany widget daty. Kolejne wartości oddzielaj przecinkami.<br>
+                        </p>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <select name="product_datepicker_product_place" style="font-family: monospace; min-width: 500px">
+                            <?php
+                                // https://www.businessbloomer.com/woocommerce-visual-hook-guide-single-product-page/
+                                $option = esc_attr(get_option('product_datepicker_product_place', null));
+                                if($option === "woocommerce_before_add_to_cart_button") {
+                                    echo '<option value="woocommerce_before_add_to_cart_button" selected>Przed przyciskiem "Dodaj do koszyka"</option>';
+                                    echo '<option value="woocommerce_before_variations_form">Przed tabelą z wariantami produktu</option>';
+                                } else {
+                                    echo '<option value="woocommerce_before_add_to_cart_button">Przed przyciskiem "Dodaj do koszyka"</option>';
+                                    echo '<option value="woocommerce_before_variations_form" selected>Przed tabelą z wariantami produktu</option>';
+                                }
+                            ?>
+                        </select>
+                        <p class="description">
+                            W którym miejscu dodać pole z datą<br>
+                        </p>
+                    </div>
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row">ID WPForms (jeśli chcesz używać przy WPForms)</th>
+                <th scope="row">Jeśli chcesz używać WPForms</th>
                 <td>
                     <div>
                         <input type="number" name="product_datepicker_wp_forms_id_form" style="font-family: monospace; min-width: 500px" value="<?php echo esc_attr( get_option('product_datepicker_wp_forms_id_form', null) ); ?>">
@@ -23,7 +43,7 @@
                             Podaj ID formularza.<br>
                         </p>
                     </div>
-                    <div>
+                    <div style="margin-top: 12px;">
                         <input type="number" name="product_datepicker_wp_forms_id_field" style="font-family: monospace; min-width: 500px" value="<?php echo esc_attr( get_option('product_datepicker_wp_forms_id_field', null) ); ?>">
                         <p class="description">
                             Podaj ID pola, które zostanie zastąpione polem z datą w formularzu.<br>
@@ -32,7 +52,7 @@
                 </td>
             </tr>
             <tr valign="top">
-                <th scope="row">ID Forminator (jeśli chcesz używać przy Forminatorze)</th>
+                <th scope="row">Jeśli chcesz używać Forminatora</th>
                 <td>
                     <div>
                         <input type="number" name="product_datepicker_forminator_id_form" style="font-family: monospace; min-width: 500px" value="<?php echo esc_attr( get_option('product_datepicker_forminator_id_form', null) ); ?>">
@@ -40,7 +60,7 @@
                             Podaj ID formularza.<br>
                         </p>
                     </div>
-                    <div>
+                    <div style="margin-top: 12px;">
                         <input type="text" name="product_datepicker_forminator_id_field" style="font-family: monospace; min-width: 500px" value="<?php echo esc_attr( get_option('product_datepicker_forminator_id_field', null) ); ?>">
                         <p class="description">
                             Podaj ID pola, które zostanie zastąpione polem z datą w formularzu.<br>

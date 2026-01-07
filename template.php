@@ -1,22 +1,37 @@
 <?php
     $uid = rand(10000, 99999);
     $excluded = prepare_option_data('product_datepicker_excluded_days');
-    global $wp_form_id, $wp_form_field_id, $forminator_form_id, $forminator_form_field_id;
-?>
+    global $wp_form_id, $wp_form_field_id, $forminator_form_field_id;
+	
+	$temp_wp_form_id = null;
+	$temp_wp_form_field_id = null;
+	$temp_forminator_form_field_id = null;
+	
+	if(count($wp_form_id) > 0) {
+		$temp_wp_form_id = $wp_form_id[0];
+	}
+	if(count($wp_form_field_id) > 0) {
+		$temp_wp_form_field_id = $wp_form_field_id[0];
+	}
+	if(count($forminator_form_field_id) > 0) {
+		$temp_forminator_form_field_id = $forminator_form_field_id[0];
+	}
 
-<div id="pickerWrapper-<?= $uid ?>" style="position:relative;">
-    <input type="text" id="dateField-<?= $uid ?>" class="date-input date-input-hidden" name="datePickerField" placeholder="YYYY-MM-DD" readonly>
-    <div id="calendar-<?= $uid ?>" class="calendar"></div>
-</div>
+    echo '<div id="pickerWrapper-' . $uid . '" style="position:relative;">
+            <input type="text" id="dateField-' . $uid . 
+            '" class="date-input date-input-hidden" name="datePickerField" placeholder="YYYY-MM-DD" readonly>
+            <div id="calendar-' . $uid . '" class="calendar"></div>
+        </div>';
+?>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const uid = <?= $uid ?>;
-        const wrapper = document.getElementById("pickerWrapper-" + uid);
+        let wrapper = document.getElementById("pickerWrapper-" + uid);
         let dateField = document.getElementById("dateField-" + uid);
         const calendar = document.getElementById("calendar-" + uid);
-        const wpFormField = document.getElementById("wpforms-<?= $wp_form_id[0] ?>-field_<?= $wp_form_field_id[0] ?>");
-        const forminatorField = document.getElementsByName('<?= $forminator_form_field_id[0] ?>');
+        const wpFormField = document.getElementById("wpforms-<?= $temp_wp_form_id ?>-field_<?= $temp_wp_form_field_id ?>");
+        const forminatorField = document.getElementsByName('<?= $temp_forminator_form_field_id ?>');
         let excludedDates = <?php echo json_encode($excluded); ?>;
 
         if(wpFormField) {
@@ -28,7 +43,7 @@
             if(wpFormField.parentNode.childNodes[0]) {
                 wpFormField.parentNode.childNodes[0].setAttribute("for", "dateField-" + uid);
             }
-            calendar.style.top = "-12px";
+            calendar.style.marginTop = "-12px";
         } else if(forminatorField && forminatorField.length > 0) {
             dateField.remove();
             forminatorField[0].setAttribute("placeholder", "YYYY-MM-DD");
@@ -38,9 +53,31 @@
             if(forminatorField[0].parentNode.childNodes[0]) {
                 forminatorField[0].parentNode.childNodes[0].setAttribute("for", "dateField-" + uid);
             }
-            calendar.style.top = "-140px";
+            forminatorField[0].parentNode.appendChild(calendar);
+            calendar.style.marginTop = "8px";
         } else {
             dateField.classList.remove('date-input-hidden');
+
+            let table = document.createElement('table');
+            let tr = document.createElement('tr');
+            let td1 = document.createElement('td');
+            let td2 = document.createElement('td');
+            let pTag = document.createElement('p');
+            pTag.innerText = "Wybierz datę";
+
+            pTag.classList.add('calendar-p-tag');
+            table.classList.add('calendar-woo-table');
+
+            td1.appendChild(pTag);
+            td2.appendChild(dateField);
+            td2.appendChild(calendar);
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+
+            table.appendChild(tr);
+            wrapper.innerHTML = "";
+            wrapper.appendChild(table);            
         }
 
         let current = new Date();
@@ -57,7 +94,7 @@
             const y = current.getFullYear();
             const m = current.getMonth() + 1;
             const formatted = `${y}-${String(m).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-            dateField.value = formatted;
+            dateField.value = formatted;           
             calendar.style.display = "none";
         }
 

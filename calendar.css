@@ -5,7 +5,7 @@
     border-radius: 4px !important;
     font-family: Arial, sans-serif !important;
     background: #fff !important;
-    margin:8px 0 14px 0;
+    margin:8px 0 4px 0;
 }
 
 .date-input-hidden {
@@ -13,9 +13,7 @@
 }
 
 .calendar {
-    position: absolute !important;
-    top: 50px;
-    left: 0;
+    position: fixed !important;
     background: #fff !important;
     border: 1px solid #ccc !important;
     border-radius: 6px !important;
@@ -74,4 +72,14 @@
     background: none;
     font-size: 16px;
     padding: 0 4px;
+}
+
+.calendar-p-tag {
+    font-weight: 700;
+    padding: 10px 10px 0 0;
+}
+
+.calendar-woo-table {
+    margin-top: 8px;
+    margin-bottom: 10px;
 }

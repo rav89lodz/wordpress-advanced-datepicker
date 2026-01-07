@@ -18,7 +18,7 @@
             <div class="calendar-grid">
         `;
 
-    if(year < current_year || month <= current_month) {
+    if(year < current_year || month <= current_month) {                
         html = `
             <div class="calendar-header">
                 <div class="nav-btn"></div>

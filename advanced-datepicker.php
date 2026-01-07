@@ -14,12 +14,38 @@
  */
 
 if (!defined('ABSPATH')) exit;
+$woo_place_option = prepare_option_data('product_datepicker_product_place');
+$woo_place_option_result = "";
+if(count($woo_place_option) > 0) {
+    $woo_place_option_result = $woo_place_option[0];
+}
+
+$allowed_ids = prepare_option_data('product_datepicker_product_ids');
 
 $wp_form_id = prepare_option_data('product_datepicker_wp_forms_id_form');
 $wp_form_field_id = prepare_option_data('product_datepicker_wp_forms_id_field');
 
 $forminator_form_id = prepare_option_data('product_datepicker_forminator_id_form');
 $forminator_form_field_id = prepare_option_data('product_datepicker_forminator_id_field');
+
+function wdp_shortcode() {
+    ob_start();
+    include( plugin_dir_path( __FILE__ ) . '/template.php' );
+    return ob_get_clean();
+}
+
+add_shortcode('advanced_datepicker', 'wdp_shortcode');
+
+/**
+ * Dodaj pole na stronie produktu (tylko dla wybranych ID)
+ */
+add_action($woo_place_option_result, function() {
+    global $product, $allowed_ids;
+
+    if (!in_array($product->get_id(), $allowed_ids)) return;
+
+    echo do_shortcode('[advanced_datepicker]');
+}, 7);
 
 /**
  * Dodanie pickera do wpforms
@@ -46,31 +72,9 @@ add_action( 'wpforms_process_filter', function($fields, $entry, $form_data) {
         }
         prepare_option_data('product_datepicker_excluded_days', $fields[$wp_form_field_id[0]]["value"]);
     }
-
+    
     return $fields;
 }, 10, 3 );
-
-
-function wdp_shortcode() {
-    ob_start();
-    include( plugin_dir_path( __FILE__ ) . '/template.php' );
-    return ob_get_clean();
-}
-
-add_shortcode('advanced_datepicker', 'wdp_shortcode');
-
-$allowed_ids = prepare_option_data('product_datepicker_product_ids');
-
-/**
- * Dodaj pole na stronie produktu (tylko dla wybranych ID)
- */
-add_action('woocommerce_before_add_to_cart_button', function() {
-    global $product, $allowed_ids;
-
-    if (!in_array($product->get_id(), $allowed_ids)) return;
-
-    echo do_shortcode('[advanced_datepicker]');
-});
 
 /**
  * Dodanie pickera do forminatora
@@ -177,6 +181,7 @@ add_action('admin_menu', function() {
 function product_datepicker_register_settings() {
     register_setting( 'product_datepicker_settings_group', 'product_datepicker_excluded_days' );
     register_setting( 'product_datepicker_settings_group', 'product_datepicker_product_ids' );
+    register_setting( 'product_datepicker_settings_group', 'product_datepicker_product_place' );
     register_setting( 'product_datepicker_settings_group', 'product_datepicker_wp_forms_id_form' );
     register_setting( 'product_datepicker_settings_group', 'product_datepicker_wp_forms_id_field' );
     register_setting( 'product_datepicker_settings_group', 'product_datepicker_forminator_id_form' );
@@ -201,15 +206,16 @@ function product_datepicker_main_menu() {
  */
 function prepare_option_data($option, $to_add = null) {
     $options_data = get_option($option, null);
+    $to_return = [];
 
     if($options_data === null) {
-        return [];
+        return $to_return;
     }
 
-    $to_return = [];
     $options_data = explode(',', $options_data);
 
     switch($option) {
+        case 'product_datepicker_product_place':
         case 'product_datepicker_forminator_id_field':
             $to_return = prepare_other_options($options_data, $option, false);
             break;
@@ -223,7 +229,7 @@ function prepare_option_data($option, $to_add = null) {
         default:
             $to_return = prepare_excluded_days($options_data, $option);
             break;
-    }
+    }    
 
     if($to_add === null) {
         return $to_return;
@@ -337,7 +343,7 @@ add_filter( 'plugin_action_links', function( $actions, $plugin_file ) {
     if (!isset($plugin)) {
         $plugin = plugin_basename(__FILE__);
     }
-
+    
     if ($plugin == $plugin_file) {
         $actions = array_merge(['settings' => '<a href="options-general.php?page=product-datepicker-main-menu">' . __('Ustawienia', 'General') . '</a>'], $actions);
     }
