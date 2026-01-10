@@ -67,6 +67,8 @@
 
             pTag.classList.add('calendar-p-tag');
             table.classList.add('calendar-woo-table');
+			
+			td1.style.width = "50%";
 
             td1.appendChild(pTag);
             td2.appendChild(dateField);

@@ -83,3 +83,12 @@
     margin-top: 8px;
     margin-bottom: 10px;
 }
+
+@media (max-width:660px) {
+	.calendar {
+		left: 33%;
+	}
+	.nav-btn {
+		padding: 10px !important;
+	}
+}
